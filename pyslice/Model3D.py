@@ -408,10 +408,11 @@ class STLModel(Model3D):
 		contents = f.read()
 		f.close()
 
-		if contents.find(b"vertex", 80) == -1:
-			# File is a binary STL file.
+		try:
+			if not contents.find(b"vertex", 80) == -1:
+				raise TypeError()
 			self.process_bin(contents)
-		else:
+		except TypeError:
 			self.process_text(contents)
 
 	def process_bin(self, contents=None):
